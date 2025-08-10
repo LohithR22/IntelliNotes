@@ -722,7 +722,6 @@ This lecture provided an in-depth study of the leader election problem in messag
 
 # Lecture 4: lec4
 
-````markdown
 # Distributed Systems: Models of Computation, Causality, and Logical Time - A Comprehensive Study Guide
 
 ## Introduction
@@ -1054,7 +1053,6 @@ This lecture provides a fundamental understanding of models of distributed compu
 
 # Lecture 5: lec5
 
-```markdown
 # Distributed Systems Study Guide: Lecture 5 - Vector Clocks, Matrix Clocks, Virtual Time, and Physical Clock Synchronization
 
 This study guide expands on the lecture material concerning logical and physical clocks in distributed systems. It aims to provide a deeper understanding of the concepts, trade-offs, and practical considerations involved in designing and implementing such systems.
@@ -1242,14 +1240,11 @@ Most operating systems, including Windows, macOS, and Linux, use NTP to synchron
 - Physical clocks can be useful in situations where approximate time is sufficient, such as logging or monitoring. In these cases, it is important to be aware of the potential for clock skew and to design the system to be resilient to these inconsistencies.
 
 By understanding the concepts outlined in this study guide, you should be well-equipped to analyze the trade-offs involved in choosing the appropriate clock synchronization mechanism for a given distributed system application.
-```
-````
 
 ---
 
 # Lecture 6: lec6
 
-```markdown
 # Distributed Systems: Global State and Snapshot Recording Algorithms - A Comprehensive Study Guide
 
 **Professor:** Rajiv Misra
@@ -1531,7 +1526,6 @@ Recording the global state of a distributed system is a vital paradigm in distri
 - **Trade-offs Exist:** There are trade-offs between consistency, performance, and the complexity of snapshot algorithms.
 
 This study guide provides a more in-depth understanding of the concepts discussed in the lecture. Remember to study the examples and numerical problems carefully to solidify your understanding. Good luck!
-```
 
 ---
 
@@ -3149,7 +3143,6 @@ Deadlock detection is an essential aspect of building robust distributed systems
 
 # Lecture 13: lec13
 
-```markdown
 # Distributed Systems Study Guide: Distributed Shared Memory (DSM)
 
 This study guide expands on the provided lecture material about Distributed Shared Memory (DSM). It provides detailed explanations, real-world examples, numerical problems, and trade-off analyses to enhance your understanding of this important distributed systems concept.
@@ -3184,6 +3177,7 @@ The DSM system typically consists of:
 - **Memory Manager:** A module responsible for managing the shared memory region and providing the unified, monolithic memory view.
 
 **Visual Representation:**
+
 ```
 
 +-------------------+ +-------------------+ +-------------------+
@@ -3208,133 +3202,136 @@ Shared Virtual Memory View
 
 **Communication:** Processes interact with the Memory Manager through:
 
-*   **Invocation:**  A request to perform a read or write operation.
-*   **Response:**  The result of the requested operation (e.g., the data read or an acknowledgment of a write).
+- **Invocation:** A request to perform a read or write operation.
+- **Response:** The result of the requested operation (e.g., the data read or an acknowledgment of a write).
 
 ## 3. Issues in Implementing DSM Software
 
 Implementing DSM is challenging. Key issues include:
 
-*   **Semantics for Concurrent Access:** How are concurrent `read` and `write` operations handled?  This is addressed through consistency models (see section 4).
-*   **Semantics of Replication:**  If data is replicated across multiple nodes (for performance or fault tolerance), how is consistency maintained?
-*   **Location of Replication:** Where should data be replicated to minimize latency and network traffic?
-*   **Replication vs. Caching:**  Is data actively replicated, or simply cached on demand?
-*   **Hardware vs. Software Control:**  Is caching/replication managed by hardware (e.g., cache-coherent NUMA) or software?
+- **Semantics for Concurrent Access:** How are concurrent `read` and `write` operations handled? This is addressed through consistency models (see section 4).
+- **Semantics of Replication:** If data is replicated across multiple nodes (for performance or fault tolerance), how is consistency maintained?
+- **Location of Replication:** Where should data be replicated to minimize latency and network traffic?
+- **Replication vs. Caching:** Is data actively replicated, or simply cached on demand?
+- **Hardware vs. Software Control:** Is caching/replication managed by hardware (e.g., cache-coherent NUMA) or software?
 
 **Design Decisions**:
 
 The design choices depend heavily on the specific application requirements. For example:
 
-*   **Remote Access:**  Hardware-based remote access is faster but more complex to implement. Software-based remote access is more flexible.
-*   **Granularity:** Is DSM implemented using pages, objects, or variables?
+- **Remote Access:** Hardware-based remote access is faster but more complex to implement. Software-based remote access is more flexible.
+- **Granularity:** Is DSM implemented using pages, objects, or variables?
 
 ## 4. Memory Consistency Models
 
-**Definition:** A memory consistency model is a contract between the DSM system and the application programmer.  It defines the rules about when writes to shared memory become visible to other processors/processes.
+**Definition:** A memory consistency model is a contract between the DSM system and the application programmer. It defines the rules about when writes to shared memory become visible to other processors/processes.
 
-**Expert Explanation:** Think of consistency models as the "rules of the game" for how data is shared.  A stricter consistency model is like playing chess with a timer – every move must happen within a certain time frame.  A weaker consistency model is like playing a casual game of cards with friends – you can take your time and even ask for advice.  The "better" model depends on the application; sometimes the strictness is needed (e.g., banking), and sometimes it's not (e.g., social media).
+**Expert Explanation:** Think of consistency models as the "rules of the game" for how data is shared. A stricter consistency model is like playing chess with a timer – every move must happen within a certain time frame. A weaker consistency model is like playing a casual game of cards with friends – you can take your time and even ask for advice. The "better" model depends on the application; sometimes the strictness is needed (e.g., banking), and sometimes it's not (e.g., social media).
 
 **Importance:** These models provide an abstraction that enables programmers to write correct applications.
 
 ### 4.1. Strict Consistency (Linearizability, Atomic Consistency)
 
-**Definition:** Any `read` to a memory location must return the value written by the *most recent* `write` to that location, according to *global time*. All operations appear to be executed atomically and sequentially.
+**Definition:** Any `read` to a memory location must return the value written by the _most recent_ `write` to that location, according to _global time_. All operations appear to be executed atomically and sequentially.
 
 **Expert Explanation:** Strict consistency is like having a perfectly synchronized global clock. Every read reflects the absolute latest write, as if all operations happen instantly.
 
 **Conditions for Linearizability:**
 
-1.  For every variable `v`, every `read` returns the most recent `write` that *immediately preceded* it.
-2.  If the `response` of operation 1 occurred *before* the `invocation` of operation 2, then operation 1 occurs before operation 2 in a global, linear sequence.
+1.  For every variable `v`, every `read` returns the most recent `write` that _immediately preceded_ it.
+2.  If the `response` of operation 1 occurred _before_ the `invocation` of operation 2, then operation 1 occurs before operation 2 in a global, linear sequence.
 
-**Real-World Example:** This is extremely difficult to achieve in practice, *especially* in geo-distributed systems. NoSQL databases rarely support strict consistency. However, some systems like **Google Spanner** attempt to provide externally consistent, linearizable reads and writes. It achieves this by leveraging atomic clocks and complex concurrency control mechanisms.
+**Real-World Example:** This is extremely difficult to achieve in practice, _especially_ in geo-distributed systems. NoSQL databases rarely support strict consistency. However, some systems like **Google Spanner** attempt to provide externally consistent, linearizable reads and writes. It achieves this by leveraging atomic clocks and complex concurrency control mechanisms.
 
 **Implementation Challenge:**
 
-*   Requires a globally synchronized clock, which is difficult to achieve in a distributed system.
+- Requires a globally synchronized clock, which is difficult to achieve in a distributed system.
 
 **Implementation using Total Order Broadcast:**
 
 1.  When a memory manager receives a `read` or `write` request, it issues a Total Order Broadcast to all processes.
 2.  Each memory manager waits for its own request to be broadcast and then performs the pending response:
-    *   **Read:** Returns the value from the local replica.
-    *   **Write:** Writes the value to the local replica and returns an acknowledgment.
+    - **Read:** Returns the value from the local replica.
+    - **Write:** Writes the value to the local replica and returns an acknowledgment.
 3.  When a memory manager receives a Total Order Broadcast of a `write` from the network, it writes the value to its local replica.
 4.  When a memory manager receives a Total Order Broadcast of a `read` from the network, it does nothing.
 
-**Why is the broadcast necessary for READ operations in Linearizability?** Even though the local replica could immediately provide an answer for a read request, the broadcast is still crucial to determine the *order* of the read operation in relation to *all* other operations.
+**Why is the broadcast necessary for READ operations in Linearizability?** Even though the local replica could immediately provide an answer for a read request, the broadcast is still crucial to determine the _order_ of the read operation in relation to _all_ other operations.
 
 **Numerical Problem:**
 
-Suppose you have a distributed system with a perfectly synchronized clock (which is impossible in practice, but let's assume for the sake of the example). A `write` operation completes at time T = 10.  What is the maximum allowable time for a `read` operation on another node to return the value written by the first operation, assuming strict consistency?
+Suppose you have a distributed system with a perfectly synchronized clock (which is impossible in practice, but let's assume for the sake of the example). A `write` operation completes at time T = 10. What is the maximum allowable time for a `read` operation on another node to return the value written by the first operation, assuming strict consistency?
 
-*   **Answer:**  Infinitesimally greater than 10. Because any read must return the most recent write, it must see a write completed at time T=10 or earlier. Because of global time and absolute ordering the read *must* see the latest write *immediately*.
+- **Answer:** Infinitesimally greater than 10. Because any read must return the most recent write, it must see a write completed at time T=10 or earlier. Because of global time and absolute ordering the read _must_ see the latest write _immediately_.
 
 ### 4.2. Sequential Consistency
 
-**Definition:** The result of any execution is the same as if all operations of the processors were executed in *some sequential order*, and the operations of each individual processor appear in this sequence in the order specified by its program.
+**Definition:** The result of any execution is the same as if all operations of the processors were executed in _some sequential order_, and the operations of each individual processor appear in this sequence in the order specified by its program.
 
-**Expert Explanation:** Sequential consistency is slightly relaxed compared to strict consistency. All processors must see the same *ordering* of operations, but that order doesn't necessarily have to match real-time. It is as if all the operations were applied by a single central CPU, and every node sees the updates in the *same order*.
+**Expert Explanation:** Sequential consistency is slightly relaxed compared to strict consistency. All processors must see the same _ordering_ of operations, but that order doesn't necessarily have to match real-time. It is as if all the operations were applied by a single central CPU, and every node sees the updates in the _same order_.
 
-**Key Difference from Linearizability:**  Sequential consistency allows for operations from different processors to be interleaved in any order, as long as *all* processors see the *same* interleaving.  Linearizability enforces the interleaving must correspond to the *real-time* order.
+**Key Difference from Linearizability:** Sequential consistency allows for operations from different processors to be interleaved in any order, as long as _all_ processors see the _same_ interleaving. Linearizability enforces the interleaving must correspond to the _real-time_ order.
 
-**Real-World Example:**  Systems like **Redis** (with specific configurations) can provide sequential consistency within a single shard. **ZooKeeper**, used for coordination in distributed systems, provides sequential consistency for its data.
+**Real-World Example:** Systems like **Redis** (with specific configurations) can provide sequential consistency within a single shard. **ZooKeeper**, used for coordination in distributed systems, provides sequential consistency for its data.
 
 **Implementation:**
 
-*   Only `write` operations participate in Total Order Broadcast.
-*   `Read` operations return the value from the local replica.
+- Only `write` operations participate in Total Order Broadcast.
+- `Read` operations return the value from the local replica.
 
 **Numerical Problem:**
 
-Consider three processes P1, P2, and P3.  P1 writes `x = 1` and then `y = 2`. P2 reads `y` and gets `2`, then reads `x`. P3 reads `x` and reads `y`. Is the following order of reads and writes sequentially consistent?:
+Consider three processes P1, P2, and P3. P1 writes `x = 1` and then `y = 2`. P2 reads `y` and gets `2`, then reads `x`. P3 reads `x` and reads `y`. Is the following order of reads and writes sequentially consistent?:
 
-*   P1: `write(x, 1)` -> `write(y, 2)`
-*   P2: `read(y) = 2` -> `read(x) = 1`
-*   P3: `read(x) = 1` -> `read(y) = 2`
+- P1: `write(x, 1)` -> `write(y, 2)`
+- P2: `read(y) = 2` -> `read(x) = 1`
+- P3: `read(x) = 1` -> `read(y) = 2`
 
-*   **Answer:** Yes, this is sequentially consistent.  All processes agree on the order: `write(x,1)` -> `write(y,2)`, thus any read must follow this ordering and return results accordingly.
+- **Answer:** Yes, this is sequentially consistent. All processes agree on the order: `write(x,1)` -> `write(y,2)`, thus any read must follow this ordering and return results accordingly.
 
 Is the following outcome also possible under sequential consistency?
-*   P1: `write(x, 1)` -> `write(y, 2)`
-*   P2: `read(y) = 2` -> `read(x) = 1`
-*   P3: `read(x) = 0` -> `read(y) = 2` (x is initially 0)
 
-*   **Answer:** No, it is not sequentially consistent. Process P3 read `x=0` before it was written by process P1 in the global ordering `write(x,1)` -> `write(y,2)`.
+- P1: `write(x, 1)` -> `write(y, 2)`
+- P2: `read(y) = 2` -> `read(x) = 1`
+- P3: `read(x) = 0` -> `read(y) = 2` (x is initially 0)
+
+- **Answer:** No, it is not sequentially consistent. Process P3 read `x=0` before it was written by process P1 in the global ordering `write(x,1)` -> `write(y,2)`.
 
 ### 4.3. Causal Consistency
 
-**Definition:** Only *causally related* writes must be seen in the same order by all processes. Writes that are not causally related can be seen in different orders.
+**Definition:** Only _causally related_ writes must be seen in the same order by all processes. Writes that are not causally related can be seen in different orders.
 
-**Expert Explanation:** Causal consistency is even more relaxed.  It says that if one write *caused* another (e.g., a user updated their status because of a previous event), then all processes must see those writes in that order.  However, writes that are independent can be seen in different orders.
+**Expert Explanation:** Causal consistency is even more relaxed. It says that if one write _caused_ another (e.g., a user updated their status because of a previous event), then all processes must see those writes in that order. However, writes that are independent can be seen in different orders.
 
 **Causal Relation:**
 
-*   At a processor, the local order of events is the causal order.
-*   A `write` *causes* a `read` if the `read` returns the value written by the `write`.
-*   The transitive closure of the above two rules defines the causal order.
+- At a processor, the local order of events is the causal order.
+- A `write` _causes_ a `read` if the `read` returns the value written by the `write`.
+- The transitive closure of the above two rules defines the causal order.
 
-**Real-World Example:**  Systems like **Amazon's DynamoDB** provide eventual consistency with causal ordering guarantees, which is close to causal consistency.  Social media platforms also tend to use causal consistency (or something close to it) to ensure that users see replies to their posts in the correct order.
+**Real-World Example:** Systems like **Amazon's DynamoDB** provide eventual consistency with causal ordering guarantees, which is close to causal consistency. Social media platforms also tend to use causal consistency (or something close to it) to ensure that users see replies to their posts in the correct order.
 
 **Example:**
 
-*   **Scenario 1 (Sequentially and Causally Consistent):**
-    *   P1: `write(x, 2)`
-    *   P2: `write(x, 7)`
-    *   P3: `read(x) = 2` -> `read(x) = 7`
-    *   P4: `read(x) = 2` -> `read(x) = 7`
+- **Scenario 1 (Sequentially and Causally Consistent):**
 
-*   **Scenario 2 (Causally Consistent, Not Sequentially Consistent):**
-    *   P1: `write(x, 2)`
-    *   P2: `write(x, 7)`
-    *   P3: `read(x) = 7` -> `read(x) = 2`
-    *   P4: `read(x) = 2` -> `read(x) = 7`
+  - P1: `write(x, 2)`
+  - P2: `write(x, 7)`
+  - P3: `read(x) = 2` -> `read(x) = 7`
+  - P4: `read(x) = 2` -> `read(x) = 7`
 
-*   **Scenario 3 (Not Causally Consistent):**
-    *   P1: `write(x, 2)`
-    *   P2: `write(x, 7)`
-    *   P3: `read(x) = 2` -> `read(x) = 2`
-    *   P4: `read(x) = 7` -> `read(x) = 7`
+- **Scenario 2 (Causally Consistent, Not Sequentially Consistent):**
+
+  - P1: `write(x, 2)`
+  - P2: `write(x, 7)`
+  - P3: `read(x) = 7` -> `read(x) = 2`
+  - P4: `read(x) = 2` -> `read(x) = 7`
+
+- **Scenario 3 (Not Causally Consistent):**
+  - P1: `write(x, 2)`
+  - P2: `write(x, 7)`
+  - P3: `read(x) = 2` -> `read(x) = 2`
+  - P4: `read(x) = 7` -> `read(x) = 7`
 
 **Numerical Problem:**
 
@@ -3344,23 +3341,23 @@ P1: `write(x, 1)` followed by sending message "A" to P2.
 
 P2, after receiving "A": `read(x)` followed by `write(y, 2)`.
 
-Process P3 observes the following: `read(y)` returning `2` followed by `read(x)` returning `0`.  Is this causally consistent, assuming x and y are initialized to 0?
+Process P3 observes the following: `read(y)` returning `2` followed by `read(x)` returning `0`. Is this causally consistent, assuming x and y are initialized to 0?
 
-*   **Answer:** No, this is not causally consistent. P2's write to `y` is causally dependent on P1's write to `x`. Therefore, P3 must see the write to x before, or at the same time as, seeing the write to y.
+- **Answer:** No, this is not causally consistent. P2's write to `y` is causally dependent on P1's write to `x`. Therefore, P3 must see the write to x before, or at the same time as, seeing the write to y.
 
 ### 4.4. PRAM Consistency (Processor Consistency)
 
-**Definition:** Write operations issued by the *same processor* are seen by other processors in the order they were issued. Writes from different processors may be seen in different orders.
+**Definition:** Write operations issued by the _same processor_ are seen by other processors in the order they were issued. Writes from different processors may be seen in different orders.
 
-**Expert Explanation:** PRAM consistency focuses only on the order of writes from a *single* processor. It makes no guarantees about the order of writes from *different* processors.
+**Expert Explanation:** PRAM consistency focuses only on the order of writes from a _single_ processor. It makes no guarantees about the order of writes from _different_ processors.
 
 **Real-World Example:** This level of consistency is quite weak and might be acceptable for some high-throughput, low-criticality applications.
 
 ### 4.5. Slow Memory
 
-**Definition:** Only write operations issued by the same processor *and* to the *same memory location* must be seen by others in that order.
+**Definition:** Only write operations issued by the same processor _and_ to the _same memory location_ must be seen by others in that order.
 
-**Expert Explanation:** This is a very weak consistency model. Guarantees are only made about the order of writes to the *same* location from the *same* processor.  Rarely used in practice due to its lack of guarantees.
+**Expert Explanation:** This is a very weak consistency model. Guarantees are only made about the order of writes to the _same_ location from the _same_ processor. Rarely used in practice due to its lack of guarantees.
 
 ### 4.6. Hierarchy of Consistency Models
 
@@ -3376,7 +3373,7 @@ Strict Consistency (Linearizability)
 > Slow Memory
 > No Consistency
 
-````
+```
 
 ## 5. Synchronization-Based Consistency Models
 
@@ -3384,15 +3381,15 @@ These models use explicit synchronization mechanisms to enforce consistency.
 
 ### 5.1. Weak Consistency
 
-**Definition:** Consistency conditions apply *only* to special synchronization instructions (e.g., barriers). Non-synchronization statements can be executed in any order by various processors.
+**Definition:** Consistency conditions apply _only_ to special synchronization instructions (e.g., barriers). Non-synchronization statements can be executed in any order by various processors.
 
 **Key Idea:** Programmers use synchronization points to ensure data is consistent.
 
 ### 5.2. Release Consistency
 
 **Definition:** Distinguishes between `acquire` and `release` operations.
-    * `Acquire`: Indicates the process is entering a critical section; all writes from other processes should be reflected locally.
-    * `Release`: Indicates the process is exiting a critical section; all local writes should be propagated to other processes.
+_ `Acquire`: Indicates the process is entering a critical section; all writes from other processes should be reflected locally.
+_ `Release`: Indicates the process is exiting a critical section; all local writes should be propagated to other processes.
 
 **Expert Explanation:** Release consistency explicitly uses synchronization primitives like locks to manage consistency. Think of it like the classic "read-modify-write" operation in databases.
 
@@ -3400,7 +3397,7 @@ These models use explicit synchronization mechanisms to enforce consistency.
 
 ### 5.3. Entry Consistency
 
-**Definition:** Each shared variable is associated with a synchronization variable (lock or barrier).  Consistency is enforced when entering or exiting a critical section associated with a specific variable.
+**Definition:** Each shared variable is associated with a synchronization variable (lock or barrier). Consistency is enforced when entering or exiting a critical section associated with a specific variable.
 
 ## 6. Shared Memory Mutual Exclusion: Lamport's Bakery Algorithm
 
@@ -3411,7 +3408,7 @@ These models use explicit synchronization mechanisms to enforce consistency.
 **Algorithm Steps (Simplified):**
 
 1.  **Choosing:** A process sets its `choosing[i]` flag to `true` while it calculates its token number.
-2.  **Token Selection:**  The process selects a token number that is one greater than the largest existing token number.
+2.  **Token Selection:** The process selects a token number that is one greater than the largest existing token number.
 3.  **Waiting:** The process waits until all processes with lower token numbers have exited the critical section.
 
 **Code Snippet (Simplified):**
@@ -3439,7 +3436,7 @@ def bakery_algorithm(i):
 
     number[i] = 0 # reset ticket
 
-````
+```
 
 **Key Properties:**
 
@@ -3456,160 +3453,159 @@ def bakery_algorithm(i):
 
 DSM provides a powerful abstraction for simplifying distributed programming by offering a shared memory interface. However, it introduces the complexity of consistency models. Understanding these models and their trade-offs is crucial for building correct and efficient DSM-based applications. The choice of the most suitable model depends on specific application requirements and acceptable levels of consistency vs. performance.
 
-````
-
-
 ---
 
 # Lecture 14: lec14
 
-```markdown
 # Distributed Systems Study Guide: Distributed Minimum Spanning Tree
 
 This study guide provides a comprehensive overview of Distributed Minimum Spanning Tree (MST) algorithms, focusing on the Gallager-Humblet-Spira (GHS) algorithm. It includes explanations, real-world examples, numerical problems, and trade-off analyses to enhance understanding.
 
 ## 1. Introduction to Distributed Minimum Spanning Tree
 
-*   **Definition:** The Distributed MST problem involves constructing a spanning tree of minimum weight in a network where nodes communicate by passing messages.
+- **Definition:** The Distributed MST problem involves constructing a spanning tree of minimum weight in a network where nodes communicate by passing messages.
 
-*   **Motivation:**  Finding a tree for efficient broadcasting is a major application. Minimizing the cost of a source process communicating with all other processes in the network.
+- **Motivation:** Finding a tree for efficient broadcasting is a major application. Minimizing the cost of a source process communicating with all other processes in the network.
 
-*   **Real-World Example:** Consider a sensor network where each sensor node needs to communicate with a central server.  An MST can minimize the total energy consumption required for all sensors to send their data to the server.
+- **Real-World Example:** Consider a sensor network where each sensor node needs to communicate with a central server. An MST can minimize the total energy consumption required for all sensors to send their data to the server.
 
 ## 2. Preliminaries
 
-*   **Weighted Graph:** The algorithms require a weighted graph G = (V, E) with *n* vertices and *m* edges, where edges have non-negative and distinct weights.
+- **Weighted Graph:** The algorithms require a weighted graph G = (V, E) with _n_ vertices and _m_ edges, where edges have non-negative and distinct weights.
 
-*   **Spanning Tree:** A tree induced in a graph, which is a connected acyclic graph spanning all vertices of G.
+- **Spanning Tree:** A tree induced in a graph, which is a connected acyclic graph spanning all vertices of G.
 
-*   **Minimum Spanning Tree (MST):** A spanning tree where the sum of its edge weights is minimized among all possible spanning trees. The weight of a tree is the sum of all the edges of that particular tree, and it should be the minimum of all possible spanning trees.
+- **Minimum Spanning Tree (MST):** A spanning tree where the sum of its edge weights is minimized among all possible spanning trees. The weight of a tree is the sum of all the edges of that particular tree, and it should be the minimum of all possible spanning trees.
 
 ## 3. Classical vs. Distributed MST Algorithms
 
-*   **Classical Algorithms:** Prim's and Kruskal's algorithms are well-known for MST construction in centralized systems.
+- **Classical Algorithms:** Prim's and Kruskal's algorithms are well-known for MST construction in centralized systems.
 
-*   **Challenges in Distributed Systems:**
-    *   Unpredictable message delays.
-    *   Prim's and Kruskal's algorithms require processing one node/vertex at a time, making parallelization difficult.
-    *   Both algorithms require processes to know the state of the whole graph, which is challenging to discover in a message-passing model.
+- **Challenges in Distributed Systems:**
 
-*   **Distributed Approach:** New techniques were needed for designing distributed algorithms for MST in message-passing models.
+  - Unpredictable message delays.
+  - Prim's and Kruskal's algorithms require processing one node/vertex at a time, making parallelization difficult.
+  - Both algorithms require processes to know the state of the whole graph, which is challenging to discover in a message-passing model.
+
+- **Distributed Approach:** New techniques were needed for designing distributed algorithms for MST in message-passing models.
 
 ## 4. Key Terminologies
 
-*   **Spanning Tree Fragment:** Any connected sub-tree of a minimum spanning tree.
+- **Spanning Tree Fragment:** Any connected sub-tree of a minimum spanning tree.
 
-*   **Minimum Weight Outgoing Edge (MWOE):** An edge adjacent to the fragment with the smallest weight that does not create a cycle.
+- **Minimum Weight Outgoing Edge (MWOE):** An edge adjacent to the fragment with the smallest weight that does not create a cycle.
 
 ## 5. Minimum Spanning Tree Properties
 
-*   **MST Property 1:** Given a fragment of an MST, let *e* be a minimum weight outgoing edge of the fragment. Then, joining *e* and its adjacent non-fragment node to the fragment yields another fragment of an MST.  This means adding the lightest edge connecting the current fragment to the rest of the graph will always result in a new, valid fragment of the overall MST.
+- **MST Property 1:** Given a fragment of an MST, let _e_ be a minimum weight outgoing edge of the fragment. Then, joining _e_ and its adjacent non-fragment node to the fragment yields another fragment of an MST. This means adding the lightest edge connecting the current fragment to the rest of the graph will always result in a new, valid fragment of the overall MST.
 
-*   **MST Property 2:** If all the edges of a connected graph have different weights, then the MST is unique.
+- **MST Property 2:** If all the edges of a connected graph have different weights, then the MST is unique.
 
 ## 6. GHS Algorithm: A Distributed MST Algorithm
 
-*   **Origin:** The GHS algorithm, developed by Gallager, Humblet, and Spira in 1983, is a fundamental algorithm in distributed computing theory.
+- **Origin:** The GHS algorithm, developed by Gallager, Humblet, and Spira in 1983, is a fundamental algorithm in distributed computing theory.
 
-*   **Based on Kruskal's Algorithm:** GHS constructs the MST in a connected undirected graph with distinct edge weights.
+- **Based on Kruskal's Algorithm:** GHS constructs the MST in a connected undirected graph with distinct edge weights.
 
-*   **Assumptions:**
-    *   Each node has a processor that initially knows only the weights of its adjacent edges.
-    *   Processors execute the same algorithm and exchange messages with neighbors until the tree is constructed.
-    *   Runs in an asynchronous message-passing model.
+- **Assumptions:**
 
-*   **Synchronous vs. Asynchronous GHS:**
-    *   **Synchronous GHS:** Works in synchronous mode with non-uniform models and distinct weights.
-        *   Each node is initially a fragment.
-        *   In parallel synchronous phases, each fragment, coordinated by a root node, finds its MWOE and merges with the adjacent fragment.
-    *   **Asynchronous GHS:** Simulates the synchronous version, works with both uniform and distinct weights. Key feature is fragment levels to manage merging.
+  - Each node has a processor that initially knows only the weights of its adjacent edges.
+  - Processors execute the same algorithm and exchange messages with neighbors until the tree is constructed.
+  - Runs in an asynchronous message-passing model.
 
-*   **Fragment Levels:** Every fragment *F* has a level *L(F) ≥ 0*. Initially, each node is a fragment of level 0. Two types of merges: absorption and join.
+- **Synchronous vs. Asynchronous GHS:**
+
+  - **Synchronous GHS:** Works in synchronous mode with non-uniform models and distinct weights.
+    - Each node is initially a fragment.
+    - In parallel synchronous phases, each fragment, coordinated by a root node, finds its MWOE and merges with the adjacent fragment.
+  - **Asynchronous GHS:** Simulates the synchronous version, works with both uniform and distinct weights. Key feature is fragment levels to manage merging.
+
+- **Fragment Levels:** Every fragment _F_ has a level _L(F) ≥ 0_. Initially, each node is a fragment of level 0. Two types of merges: absorption and join.
 
 ### 6.1 Fragment Merging Rules
 
-*   **Absorption:** If fragment *F* wishes to connect to fragment *F'*, and *L(F) < L(F')*, then *F* is absorbed into *F'*, and the resulting fragment has level *L(F')*.  The smaller fragment defers to the larger one.
+- **Absorption:** If fragment _F_ wishes to connect to fragment _F'_, and _L(F) < L(F')_, then _F_ is absorbed into _F'_, and the resulting fragment has level _L(F')_. The smaller fragment defers to the larger one.
 
-*   **Join:** If fragments *F* and *F'* have the same MWOE and *L(F) = L(F')*, then the fragments combine into a new fragment *F''* with level *L(F'') = L(F) + 1*.  This creates a new, higher-level fragment.
+- **Join:** If fragments _F_ and _F'_ have the same MWOE and _L(F) = L(F')_, then the fragments combine into a new fragment _F''_ with level _L(F'') = L(F) + 1_. This creates a new, higher-level fragment.
 
 ### 6.2 Core Edge
 
-*   If fragments *F* and *F'* with the same level are combined, then the combining edge is called the **core** of the new fragment. The core is the edge that initiated the merge and defines the identity of the new fragment.
+- If fragments _F_ and _F'_ with the same level are combined, then the combining edge is called the **core** of the new fragment. The core is the edge that initiated the merge and defines the identity of the new fragment.
 
 ## 7. GHS Algorithm: Preconditions
 
-*   **Connected Undirected Graph:** The algorithm must run on a connected, undirected graph.
-*   **Distinct Finite Weights:** Each edge must have a distinct finite weight.
-*   **Initial Knowledge:** Each node initially knows the weight of each edge incident to that node.
-*   **Quiescent State:** Initially, each node is in a quiescent (sleeping) state, awakened spontaneously or by a message.
-*   **Message Delivery:** Messages can be transmitted independently in both directions and arrive after an unpredictable, but finite delay without error.  Each edge delivers messages in FIFO order.
+- **Connected Undirected Graph:** The algorithm must run on a connected, undirected graph.
+- **Distinct Finite Weights:** Each edge must have a distinct finite weight.
+- **Initial Knowledge:** Each node initially knows the weight of each edge incident to that node.
+- **Quiescent State:** Initially, each node is in a quiescent (sleeping) state, awakened spontaneously or by a message.
+- **Message Delivery:** Messages can be transmitted independently in both directions and arrive after an unpredictable, but finite delay without error. Each edge delivers messages in FIFO order.
 
 ## 8. GHS Algorithm: Notations and Node States
 
-*   **Fragment:** Every node starts as a single fragment.
-*   **Level:** Each fragment has an associated level impacting how fragments combine. A fragment with a single node is defined as level 0.
-*   **Node States:**
-    *   **Sleeping:** Initial state.
-    *   **Find:** During the fragment's search for a minimal outgoing edge.
-    *   **Found:** After a minimal outgoing edge has been found.
+- **Fragment:** Every node starts as a single fragment.
+- **Level:** Each fragment has an associated level impacting how fragments combine. A fragment with a single node is defined as level 0.
+- **Node States:**
+  - **Sleeping:** Initial state.
+  - **Find:** During the fragment's search for a minimal outgoing edge.
+  - **Found:** After a minimal outgoing edge has been found.
 
 ## 9. GHS Algorithm Description
 
-*   **Level Assignment:** GHS assigns a level to each fragment, a non-decreasing integer with the initial value 0.
-*   **Fragment ID:** Each non-zero level fragment has an ID, the ID of the core edge in the fragment selected during its construction.
-*   **Edge Categories:** During execution, each node classifies incident edges into three categories:
-    *   **Branch Edges:** Edges determined to be part of the MST.
-    *   **Rejected Edges:** Edges determined *not* to be part of the MST (because they would form a cycle).
-    *   **Basic Edges:** Edges that are neither branches nor rejected edges (candidates).
+- **Level Assignment:** GHS assigns a level to each fragment, a non-decreasing integer with the initial value 0.
+- **Fragment ID:** Each non-zero level fragment has an ID, the ID of the core edge in the fragment selected during its construction.
+- **Edge Categories:** During execution, each node classifies incident edges into three categories:
+  - **Branch Edges:** Edges determined to be part of the MST.
+  - **Rejected Edges:** Edges determined _not_ to be part of the MST (because they would form a cycle).
+  - **Basic Edges:** Edges that are neither branches nor rejected edges (candidates).
 
 ### 9.1 Algorithm for Level 0 Fragments
 
-*   Each awakened node chooses its minimum weight incident edge and marks it as a branch edge.
-*   Sends a message via the branch to notify the node on the other side.
-*   Waits for a message from the other end of the edge.
-*   The edge chosen by both nodes becomes the core with level 1.
+- Each awakened node chooses its minimum weight incident edge and marks it as a branch edge.
+- Sends a message via the branch to notify the node on the other side.
+- Waits for a message from the other end of the edge.
+- The edge chosen by both nodes becomes the core with level 1.
 
 ### 9.2 Algorithm for Nonzero Level Fragments
 
 The execution is separated into three stages:
 
-1.  **Broadcast:** The two nodes adjacent to the core broadcast messages (containing the fragment ID and level) to the rest of the nodes in the fragment via branch edges (not via the core).  This informs all nodes of the new fragment's identity.
-2.  **Convergecast:** All nodes in the fragment cooperate to find the MWOE. Messages are sent in the opposite direction of the broadcast, initialized by all leaves (nodes with only one branch edge). The message contains the minimum weight of the incident outgoing edge found. Each non-leaf node, after receiving *n-1* convergecast messages (where *n* is the number of its branch edges), picks the minimum weight from the messages and compares it to the weight of its incident outgoing edges. The smallest weight is sent towards the branch it received the broadcast from.
+1.  **Broadcast:** The two nodes adjacent to the core broadcast messages (containing the fragment ID and level) to the rest of the nodes in the fragment via branch edges (not via the core). This informs all nodes of the new fragment's identity.
+2.  **Convergecast:** All nodes in the fragment cooperate to find the MWOE. Messages are sent in the opposite direction of the broadcast, initialized by all leaves (nodes with only one branch edge). The message contains the minimum weight of the incident outgoing edge found. Each non-leaf node, after receiving _n-1_ convergecast messages (where _n_ is the number of its branch edges), picks the minimum weight from the messages and compares it to the weight of its incident outgoing edges. The smallest weight is sent towards the branch it received the broadcast from.
 3.  **Change-Core:** After completion of the convergecast, the two nodes connected by the core inform each other of the best edge they received, identifying the MWOE from the entire fragment. A message is sent from the core to the MWOE via branch edges. Finally, a message is sent via the chosen outgoing edge to request a merge with the neighboring fragment.
 
 ## 10. Execution Example
 
-*   The algorithm starts with fragments of level 0.
-*   When a node awakens, it finds the minimum edge connected, marks it as a branch of the MST, and sends a connect message over this edge, entering a found state. This connect message attempts to merge the fragments.
-*   Fragments at level *l* combine out of two level *L-1* fragments. The weight of the core is the identity of the fragment and acts as the root of the fragment tree.
+- The algorithm starts with fragments of level 0.
+- When a node awakens, it finds the minimum edge connected, marks it as a branch of the MST, and sends a connect message over this edge, entering a found state. This connect message attempts to merge the fragments.
+- Fragments at level _l_ combine out of two level _L-1_ fragments. The weight of the core is the identity of the fragment and acts as the root of the fragment tree.
 
 ## 11. Handling Messages
 
-*   **Initiate Message:** Nodes adjacent to the core send an initiate message to the borders, relayed by intermediate nodes in the fragment, putting the node in the find state. Basic edges (yet to be classified) can be inside the fragment or outgoing edges. Rejected edges are always inside the fragment. Branches are MST edges.
-*   **Test Message:** On receiving the initiate message, a node tries to find the MWOE, sending a test message on the basic edge.
-*   **Reject Message:** On receiving the test message, if the identity is the same, send a reject message (the edge is rejected; same identity means it's in the same fragment and connection leads to a cycle).  If the test was sent in both directions, the edge is rejected automatically without a reject message.
-*   **Accept Message:** In case of an accept message, the edge is accepted as a candidate.
-*   **Report Messages:** The node sends report messages along the branches of the MST. If no outgoing edge was found, the algorithm is complete after sending; they go into a found state. Every leaf sends the report when resolving its outgoing edge, and its children send theirs. Every node remembers the branch to the MWOE of its sub-branch, denoted the best edge. The core adjacent nodes exchange reports and decide on the minimal outgoing edge.
-*   **Change-Core Message:** When decided, a change-core message is sent over the branches to the minimal outgoing edge; the tree branch points to the new core. Finally, a connect message is sent over the minimal edge.
+- **Initiate Message:** Nodes adjacent to the core send an initiate message to the borders, relayed by intermediate nodes in the fragment, putting the node in the find state. Basic edges (yet to be classified) can be inside the fragment or outgoing edges. Rejected edges are always inside the fragment. Branches are MST edges.
+- **Test Message:** On receiving the initiate message, a node tries to find the MWOE, sending a test message on the basic edge.
+- **Reject Message:** On receiving the test message, if the identity is the same, send a reject message (the edge is rejected; same identity means it's in the same fragment and connection leads to a cycle). If the test was sent in both directions, the edge is rejected automatically without a reject message.
+- **Accept Message:** In case of an accept message, the edge is accepted as a candidate.
+- **Report Messages:** The node sends report messages along the branches of the MST. If no outgoing edge was found, the algorithm is complete after sending; they go into a found state. Every leaf sends the report when resolving its outgoing edge, and its children send theirs. Every node remembers the branch to the MWOE of its sub-branch, denoted the best edge. The core adjacent nodes exchange reports and decide on the minimal outgoing edge.
+- **Change-Core Message:** When decided, a change-core message is sent over the branches to the minimal outgoing edge; the tree branch points to the new core. Finally, a connect message is sent over the minimal edge.
 
 ## 12. Special Cases
 
-*   **Connecting Same Level Fragments:** Both core adjacent nodes send a connect message, which causes the level to be increased, the core is changed, and new initiate messages are sent.
-*   **Lower Level Fragment Joining:** When a lower level fragment *F'* at a node *n'* joins the same fragment at a node *n* before *n* sends its report, it can send *n'* an initiate message with find listed, so it joins the search. If it joins after *n* has sent its report, then *n* already found a lower edge, so *n'* receives an initiate message with the found message, and it does not join the search.
+- **Connecting Same Level Fragments:** Both core adjacent nodes send a connect message, which causes the level to be increased, the core is changed, and new initiate messages are sent.
+- **Lower Level Fragment Joining:** When a lower level fragment _F'_ at a node _n'_ joins the same fragment at a node _n_ before _n_ sends its report, it can send _n'_ an initiate message with find listed, so it joins the search. If it joins after _n_ has sent its report, then _n_ already found a lower edge, so _n'_ receives an initiate message with the found message, and it does not join the search.
 
 ## 13. Forwarding Initiate Messages
 
-*   When forwarding an initiate message to the leaves at level L, it is also forwarded to any pending fragments at level L-1, as they might be delayed with their response.
+- When forwarding an initiate message to the leaves at level L, it is also forwarded to any pending fragments at level L-1, as they might be delayed with their response.
 
 ## 14. Complexity Analysis
 
-*   **Fragment Levels:** Log n is an upper bound on the fragment levels.
-*   **Message Complexity:**
-    *   Assume the communication complexity at each level (except 0 and the last): each node accepts up to 1 initiate/accept message and transmits up to 1 test/report/change-route/connect message. Since the number of levels is bounded by log n, the number of such messages is at most 5N(logN-1).
-    *   At level 0, each node receives at most one initiate and transmits at most one connect.
-    *   At the last level, a node can send at most one report message, resulting in at most 3N messages.
-    *   **Upper Bound:** The total message complexity is O(N log N + E), where N is the number of nodes and E is the number of edges.
-*   **Time Complexity:**  Under the emission of initial awakening, it's also O(N log N + E).
+- **Fragment Levels:** Log n is an upper bound on the fragment levels.
+- **Message Complexity:**
+  - Assume the communication complexity at each level (except 0 and the last): each node accepts up to 1 initiate/accept message and transmits up to 1 test/report/change-route/connect message. Since the number of levels is bounded by log n, the number of such messages is at most 5N(logN-1).
+  - At level 0, each node receives at most one initiate and transmits at most one connect.
+  - At the last level, a node can send at most one report message, resulting in at most 3N messages.
+  - **Upper Bound:** The total message complexity is O(N log N + E), where N is the number of nodes and E is the number of edges.
+- **Time Complexity:** Under the emission of initial awakening, it's also O(N log N + E).
 
 ## 15. Numerical Problems and Examples
 
@@ -3617,25 +3613,25 @@ The execution is separated into three stages:
 
 Let's analyze the availability of a system using the concept of "nines." Availability is often expressed as a percentage, representing the uptime of a system.
 
-*   **Three Nines (99.9% Availability):**
+- **Three Nines (99.9% Availability):**
 
-    *   Downtime per year: (100% - 99.9%) \* 365 days = 0.1% \* 365 days = 0.365 days
-    *   Downtime per year in hours: 0.365 days \* 24 hours/day = 8.76 hours
+  - Downtime per year: (100% - 99.9%) \* 365 days = 0.1% \* 365 days = 0.365 days
+  - Downtime per year in hours: 0.365 days \* 24 hours/day = 8.76 hours
 
-*   **Five Nines (99.999% Availability):**
+- **Five Nines (99.999% Availability):**
 
-    *   Downtime per year: (100% - 99.999%) \* 365 days = 0.001% \* 365 days = 0.00365 days
-    *   Downtime per year in hours: 0.00365 days \* 24 hours/day = 0.0876 hours (approximately 5.26 minutes)
+  - Downtime per year: (100% - 99.999%) \* 365 days = 0.001% \* 365 days = 0.00365 days
+  - Downtime per year in hours: 0.00365 days \* 24 hours/day = 0.0876 hours (approximately 5.26 minutes)
 
-**Problem:**  A critical banking system requires at least four nines (99.99%) availability. If the current system's logs show an average downtime of 5 minutes per month, does it meet the requirement?
+**Problem:** A critical banking system requires at least four nines (99.99%) availability. If the current system's logs show an average downtime of 5 minutes per month, does it meet the requirement?
 
 **Solution:**
 
-*   Total downtime per year: 5 minutes/month * 12 months/year = 60 minutes/year = 1 hour/year
-*   Percentage of downtime: (1 hour / (365 days * 24 hours/day)) * 100% = (1 / 8760) * 100% ≈ 0.0114%
-*   Availability: 100% - 0.0114% = 99.9886%
+- Total downtime per year: 5 minutes/month \* 12 months/year = 60 minutes/year = 1 hour/year
+- Percentage of downtime: (1 hour / (365 days _ 24 hours/day)) _ 100% = (1 / 8760) \* 100% ≈ 0.0114%
+- Availability: 100% - 0.0114% = 99.9886%
 
-**Conclusion:** The system does *not* meet the four nines availability requirement (99.99%). It needs further improvement to reduce downtime.
+**Conclusion:** The system does _not_ meet the four nines availability requirement (99.99%). It needs further improvement to reduce downtime.
 
 ### 15.2 Calculating Quorum Size in Raft
 
@@ -3645,24 +3641,23 @@ Raft is a consensus algorithm used in distributed systems. A key concept is the 
 
 **Solution:**
 
-The quorum size is calculated as:  `quorum_size = floor((N / 2) + 1)` where N is the number of nodes in the cluster.
+The quorum size is calculated as: `quorum_size = floor((N / 2) + 1)` where N is the number of nodes in the cluster.
 
 In this case, N = 7.
 
 `quorum_size = floor((7 / 2) + 1) = floor(3.5 + 1) = floor(4.5) = 4`
 
-**Answer:** The minimum quorum size required for the 7-node Raft cluster is 4.  This means at least 4 nodes must agree for a log entry to be considered committed.
+**Answer:** The minimum quorum size required for the 7-node Raft cluster is 4. This means at least 4 nodes must agree for a log entry to be considered committed.
 
 ## 16. Trade-offs
 
-*   **Message Complexity vs. Algorithm Complexity:** While the GHS algorithm achieves a relatively low message complexity, the algorithm itself is quite complex to implement and reason about.  Simpler algorithms might have higher message overhead but are easier to understand and maintain.
+- **Message Complexity vs. Algorithm Complexity:** While the GHS algorithm achieves a relatively low message complexity, the algorithm itself is quite complex to implement and reason about. Simpler algorithms might have higher message overhead but are easier to understand and maintain.
 
-*   **Asynchronous vs. Synchronous Models:** Asynchronous algorithms are more robust to network delays and failures, but they are also more complex to design and verify. Synchronous algorithms are easier to reason about but less fault-tolerant. GHS supports both models, with the asynchronous version being more practical for many real-world distributed systems.
+- **Asynchronous vs. Synchronous Models:** Asynchronous algorithms are more robust to network delays and failures, but they are also more complex to design and verify. Synchronous algorithms are easier to reason about but less fault-tolerant. GHS supports both models, with the asynchronous version being more practical for many real-world distributed systems.
 
 ## 17. Conclusion
 
 Distributed MST algorithms are valuable in communication networks for broadcasting information from one node to all others, minimizing costs associated with each channel. Besides broadcasting, these algorithms can reduce communication complexities for various control problems in the network. The GHS algorithm provides an efficient method for distributed MST construction, but understanding the trade-offs involved in its implementation is crucial.
-````
 
 ---
 
@@ -4425,7 +4420,6 @@ Self-stabilization is a powerful paradigm for designing resilient distributed sy
 
 # Lecture 18: lec18
 
-```markdown
 # Distributed Systems: Randomized Distributed Algorithms & Leader Election
 
 ## Study Guide
@@ -4622,7 +4616,6 @@ Consider a synchronous ring with 100 nodes. Estimate the expected number of mess
 ### 6. Conclusion
 
 Randomized distributed algorithms offer a powerful approach for solving problems in distributed systems, especially when dealing with symmetry, uncertainty, and impossibility results. The leader election problem in an anonymous ring exemplifies how randomization, combined with a weakening of the problem statement, can lead to practical solutions. It is crucial to carefully analyze the trade-offs between probability of success, resource consumption (time, messages), and the practicality of the weakened problem guarantees. These randomized techniques are invaluable tools when designing robust and scalable distributed systems.
-```
 
 ---
 
@@ -5229,7 +5222,6 @@ GFS is a distributed file system that supports large-scale data processing workl
 
 # Lecture 21: lec21
 
-```markdown
 # Distributed Systems: MapReduce - A Comprehensive Study Guide
 
 This study guide provides a detailed exploration of the MapReduce programming model, its architecture, implementation, and applications, based on the provided lecture material. It includes expert explanations, real-world examples, numerical problems, and trade-off analyses to enhance your understanding.
@@ -5519,7 +5511,6 @@ The MapReduce programming model has been successfully used for many purposes, it
 ## Further Reading
 
 - "MapReduce: Simplified Data Processing on Large Clusters" (Google Research).
-```
 
 ---
 
@@ -5744,7 +5735,7 @@ This study guide expands upon the lecture material on Apache Spark, a powerful f
 
 - **Code Example (Scala): Word Count**
 
-```scala
+````scala
 import org.apache.spark.{SparkConf, SparkContext}
 
 object WordCount {
@@ -5761,8 +5752,8 @@ object WordCount {
     counts.saveAsTextFile("output")       //Action (saveAsTextFile) - saves output to file
     sc.stop()
   }
-}
-```
+}```
+````
 
 ## 6. RDD Operations: Transformations & Actions in Detail
 
@@ -6623,7 +6614,6 @@ This study guide provides a comprehensive overview of the concepts behind Bitcoi
 
 # Lecture 27: lec27
 
-```markdown
 # Distributed Systems: Blockchain Technology - A Comprehensive Study Guide
 
 This study guide expands upon the lecture material on Blockchain technology, providing in-depth explanations, real-world examples, and numerical problems to solidify understanding.
@@ -6793,4 +6783,7 @@ This study guide expands upon the lecture material on Blockchain technology, pro
 - **Trade-offs**: When designing a blockchain, a fundamental decision involves the trade-off between immediate consistency and continuous availability.
 
 ---
+
+```
+
 ```
